@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
 import 'package:my_restaurant/data/provider/detail_provider.dart';
+import 'package:my_restaurant/utils/result_state.dart';
 import 'package:my_restaurant/widget/platform_widget.dart';
 import 'package:provider/provider.dart';
 
-class DetailPage extends StatelessWidget{
+class DetailPage extends StatelessWidget {
   static const routeName = '/restaurant_list_detail';
   final String id;
   const DetailPage({Key? key, required this.id}) : super(key: key);
@@ -16,9 +17,9 @@ class DetailPage extends StatelessWidget{
         create: (_) => DetailProvider(apiService: ApiService(), id: id),
         child: Consumer<DetailProvider>(
           builder: (context, state, _) {
-            if (state.state == ResultState.loading) {
+            if (state.state == ResultState.Loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.state == ResultState.hasData) {
+            } else if (state.state == ResultState.HasData) {
               final details = state.result.detail;
               return Scaffold(
                 body: SingleChildScrollView(
@@ -31,23 +32,47 @@ class DetailPage extends StatelessWidget{
                             child: ClipRRect(
                               borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15)
-                              ),
+                                  bottomRight: Radius.circular(15)),
                               child: Image.network(
-                                'https://restaurant-api.dicoding.dev/images/medium/'
-                                    + details.pictureId,
+                                'https://restaurant-api.dicoding.dev/images/medium/' +
+                                    details.pictureId,
                               ),
                             ),
                           ),
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 25),
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 16, bottom: 25),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              details.name, style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  details.name,
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.black26,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(
+                                      details.rating.toString(),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 8),
                             Container(
@@ -60,7 +85,9 @@ class DetailPage extends StatelessWidget{
                                     color: Colors.black26,
                                     size: 18,
                                   ),
-                                  const SizedBox(width: 3,),
+                                  const SizedBox(
+                                    width: 3,
+                                  ),
                                   Text(
                                     details.address,
                                   ),
@@ -74,10 +101,8 @@ class DetailPage extends StatelessWidget{
                               "Descriptions",
                             ),
                             const SizedBox(height: 10),
-                            Text(
-                              details.description,
-                              textAlign: TextAlign.justify
-                            ),
+                            Text(details.description,
+                                textAlign: TextAlign.justify),
                             const SizedBox(height: 25),
                             const Text(
                               "Foods",
@@ -88,13 +113,14 @@ class DetailPage extends StatelessWidget{
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: state.result.detail.menus.foods.length,
+                                itemCount:
+                                    state.result.detail.menus.foods.length,
                                 itemBuilder: (context, index) {
-                                  return _buildMenu(context, details.menus.foods[index]);
+                                  return _buildMenu(
+                                      context, details.menus.foods[index]);
                                 },
                               ),
                             ),
-
                             const SizedBox(height: 15),
                             const Text(
                               "Drinks",
@@ -105,9 +131,11 @@ class DetailPage extends StatelessWidget{
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: state.result.detail.menus.drinks.length,
+                                itemCount:
+                                    state.result.detail.menus.drinks.length,
                                 itemBuilder: (context, index) {
-                                  return _buildMenu(context, details.menus.drinks[index]);
+                                  return _buildMenu(
+                                      context, details.menus.drinks[index]);
                                 },
                               ),
                             ),
@@ -118,24 +146,20 @@ class DetailPage extends StatelessWidget{
                   ),
                 ),
               );
-            } else if (state.state == ResultState.noData) {
+            } else if (state.state == ResultState.NoData) {
               return Center(child: Text(state.message));
-            } else if (state.state == ResultState.error) {
+            } else if (state.state == ResultState.Error) {
               return Center(child: Text(state.message));
             } else {
               return const Center(child: Text(''));
             }
           },
-        )
-    );
-
+        ));
   }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Detail')
-      ),
+      appBar: AppBar(title: const Text('Detail')),
       body: _buildDetail(context),
     );
   }
@@ -162,31 +186,26 @@ class DetailPage extends StatelessWidget{
 Widget _buildMenu(BuildContext context, menu) {
   return InkWell(
       child: SizedBox(
-        width: 150,
-        child: Card(
-          margin: const EdgeInsets.only(bottom: 20, right: 20),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  menu.name,
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-              ),
-            ],
-          )
+    width: 150,
+    child: Card(
+        margin: const EdgeInsets.only(bottom: 20, right: 20),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-      )
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                menu.name,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        )),
+  ));
 }

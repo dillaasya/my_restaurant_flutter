@@ -7,6 +7,8 @@ import 'package:my_restaurant/widget/card_restaurant_search.dart';
 import 'package:my_restaurant/widget/platform_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/result_state.dart';
+
 class SearchPage extends StatefulWidget {
   static const routeName = '/restaurant_search';
 
@@ -90,13 +92,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildSearch(BuildContext context, SearchProvider state) {
-    if (state.state == ResultState.loading) {
+    if (state.state == ResultState.Loading) {
       return const Center(child: CircularProgressIndicator());
-    } else if (state.state == ResultState.hasData) {
+    } else if (state.state == ResultState.HasData) {
       return Expanded(
         child: ListView.builder(
           itemCount: state.result.restaurants.length,
-          padding: const EdgeInsets.only(left: 16, right: 16),
           itemBuilder: (context, index) {
             var restaurant = state.result.restaurants[index];
             return CardRestaurantSearch(restaurant: restaurant);
@@ -104,9 +105,9 @@ class _SearchPageState extends State<SearchPage> {
         ),
       );
     }
-    else if (state.state == ResultState.noData) {
+    else if (state.state == ResultState.NoData) {
       return Center(child: Text(state.message));
-    } else if (state.state == ResultState.error) {
+    } else if (state.state == ResultState.Error) {
       return Center(child: Text(state.message));
     } else {
       return const Center(child: Text(''));

@@ -9,6 +9,8 @@ import 'package:my_restaurant/widget/platform_widget.dart';
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
 
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -17,13 +19,13 @@ class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
   static const String _dashboardTitle = 'Dashboard';
 
-  List<Widget> _listWidget = [
-    ListPage(),
-    SearchPage(),
-    FavoritePage(),
+  final List<Widget> _listWidget = [
+    const ListPage(),
+    const SearchPage(),
+    const FavoritePage(),
   ];
 
-  List<BottomNavigationBarItem> _bottomNavBarItems = [
+  final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
       icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
       label: _dashboardTitle,

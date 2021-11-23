@@ -24,8 +24,6 @@ class _ListPageState extends State<ListPage> {
               return const Center(child: CircularProgressIndicator());
             } else if (state.state == ResultState.hasData) {
               return SafeArea(
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 16, left: 16, top: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -40,7 +38,6 @@ class _ListPageState extends State<ListPage> {
                         )
                       ],
                     )
-                ),
               );
             } else if (state.state == ResultState.noData) {
               return Center(child: Text(state.message));

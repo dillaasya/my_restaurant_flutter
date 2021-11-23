@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
 import 'package:my_restaurant/data/model/restaurant_detail.dart';
-
-enum ResultState { loading, noData, hasData, error }
+import 'package:my_restaurant/utils/result_state.dart';
 
 class DetailProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -23,20 +21,20 @@ class DetailProvider extends ChangeNotifier {
 
   Future<dynamic> _fetchRestaurantDetails(String? id) async {
     try {
-      _state = ResultState.loading;
+      _state = ResultState.Loading;
       notifyListeners();
       final restaurantDetails = await apiService.detailList(id);
       if (restaurantDetails.detail.menus.foods.isEmpty && restaurantDetails.detail.menus.drinks.isEmpty) {
-        _state = ResultState.noData;
+        _state = ResultState.NoData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
-        _state = ResultState.hasData;
+        _state = ResultState.HasData;
         notifyListeners();
         return _restaurantDetails = restaurantDetails;
       }
     } catch (e) {
-      _state = ResultState.error;
+      _state = ResultState.Error;
       notifyListeners();
       return _message = 'Turn on your internet connection';
     }
