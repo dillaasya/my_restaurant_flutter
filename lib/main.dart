@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
+import 'package:my_restaurant/data/db/database_helper.dart';
+import 'package:my_restaurant/data/provider/database_provider.dart';
 import 'package:my_restaurant/data/provider/list_provider.dart';
 import 'package:my_restaurant/ui/detail_page.dart';
 import 'package:my_restaurant/ui/home_page.dart';
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
             ),
             initialRoute: HomePage.routeName,
             routes: {
-              HomePage.routeName: (context) => const HomePage(),
+              HomePage.routeName: (context) => HomePage(),
               DetailPage.routeName: (context) => DetailPage(
                     id: ModalRoute.of(context)?.settings.arguments as String,
                   )

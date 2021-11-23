@@ -11,21 +11,22 @@ class DatabaseHelper {
 
   factory DatabaseHelper() => _instance ?? DatabaseHelper._internal();
 
-  static const String _tblFavorite = 'favorite';
+  static const String _tblBookmark = 'bookmarks';
 
   Future<Database> _initializeDb() async {
     var path = await getDatabasesPath();
     var db = openDatabase(
-      '$path/myrestaurant.db',
+      '$path/newsapp.db',
       onCreate: (db, version) async {
-        await db.execute('''
-        CREATE TABLE $_tblFavorite (
-             id TEXT PRIMARY KEY,
-             name TEXT,
-             city TEXT,
+        await db.execute('''CREATE TABLE $_tblBookmark (
+             url TEXT PRIMARY KEY,
+             author TEXT,
+             title TEXT,
              description TEXT,
-             pictureId TEXT,
-             rating DOUBLE)     
+             urlToImage TEXT,
+             publishedAt TEXT,
+             content TEXT
+           )     
         ''');
       },
       version: 1,
@@ -40,14 +41,14 @@ class DatabaseHelper {
     return _database;
   }
 
-  Future<void> insertFavortie(Restaurant article) async {
+  Future<void> insertBookmark(Restaurant article) async {
     final db = await database;
-    await db!.insert(_tblFavorite, article.toJson());
+    await db!.insert(_tblBookmark, article.toJson());
   }
 
-  Future<List<Restaurant>> getFavortie() async {
+  Future<List<Restaurant>> getBookmarks() async {
     final db = await database;
-    List<Map<String, dynamic>> results = await db!.query(_tblFavorite);
+    List<Map<String, dynamic>> results = await db!.query(_tblBookmark);
 
     return results.map((res) => Restaurant.fromJson(res)).toList();
   }

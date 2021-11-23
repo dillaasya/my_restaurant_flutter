@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
-import 'package:my_restaurant/data/db/database_helper.dart';
 import 'package:my_restaurant/data/model/restaurant_list.dart';
 
 import '../../utils/result_state.dart';
+import '../db/database_helper.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
 
   DatabaseProvider({required this.databaseHelper}) {
-    _getFavorite();
+    _getBookmarks();
   }
 
   late ResultState _state;
@@ -17,12 +17,12 @@ class DatabaseProvider extends ChangeNotifier {
   String _message = '';
   String get message => _message;
 
-  List<Restaurant> _favorite = [];
-  List<Restaurant> get favorite => _favorite;
+  List<Restaurant> _bookmarks = [];
+  List<Restaurant> get bookmarks => _bookmarks;
 
-  void _getFavorite() async {
-    _favorite = await databaseHelper.getFavortie();
-    if (_favorite.isNotEmpty) {
+  void _getBookmarks() async {
+    _bookmarks = await databaseHelper.getBookmarks();
+    if (_bookmarks.isNotEmpty) {
       _state = ResultState.HasData;
     } else {
       _state = ResultState.NoData;
@@ -31,7 +31,7 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addFavortie(Restaurant restaurant) async {
+  void addBookmark(Restaurant article) async {
     try {
       await databaseHelper.insertFavortie(restaurant);
       _getFavorite();

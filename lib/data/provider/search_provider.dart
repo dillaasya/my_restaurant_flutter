@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
 import 'package:my_restaurant/data/model/restaurant_list.dart';
 import 'package:my_restaurant/data/model/restaurant_search.dart';
+import 'package:my_restaurant/utils/result_state.dart';
 
 import '../../utils/result_state.dart';
 
