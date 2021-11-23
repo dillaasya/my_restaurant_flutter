@@ -7,7 +7,6 @@ import '../../utils/result_state.dart';
 class DatabaseProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
 
-
   DatabaseProvider({required this.databaseHelper}) {
     _getFavorite();
   }

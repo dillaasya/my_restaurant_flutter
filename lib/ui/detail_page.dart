@@ -13,6 +13,7 @@ class DetailPage extends StatelessWidget {
   const DetailPage({Key? key, required this.id}) : super(key: key);
 
   Widget _buildDetail(BuildContext context) {
+
     return ChangeNotifierProvider<DetailProvider>(
         create: (_) => DetailProvider(apiService: ApiService(), id: id),
         child: Consumer<DetailProvider>(

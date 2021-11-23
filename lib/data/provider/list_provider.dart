@@ -27,13 +27,11 @@ class ListProvider extends ChangeNotifier {
         _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
-
       } else {
         _state = ResultState.hasData;
         notifyListeners();
         return _restaurantList = restaurant;
       }
-
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();

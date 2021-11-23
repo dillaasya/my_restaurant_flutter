@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_restaurant/ui/favorite_page.dart';
 import 'package:my_restaurant/ui/list_page.dart';
 import 'package:my_restaurant/ui/search_page.dart';
+import 'package:my_restaurant/ui/setting_page.dart';
 import 'package:my_restaurant/widget/platform_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     const ListPage(),
     const SearchPage(),
     const FavoritePage(),
+    const SettingPage()
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -35,8 +37,14 @@ class _HomePageState extends State<HomePage> {
       label: SearchPage.searchTitle,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.square_favorites_alt : Icons.favorite),
+      icon: Icon(Platform.isIOS
+          ? CupertinoIcons.square_favorites_alt
+          : Icons.favorite),
       label: FavoritePage.favoriteTitle,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
+      label: SettingPage.settingTitle,
     ),
   ];
 

@@ -24,7 +24,8 @@ class DetailProvider extends ChangeNotifier {
       _state = ResultState.Loading;
       notifyListeners();
       final restaurantDetails = await apiService.detailList(id);
-      if (restaurantDetails.detail.menus.foods.isEmpty && restaurantDetails.detail.menus.drinks.isEmpty) {
+      if (restaurantDetails.detail.menus.foods.isEmpty &&
+          restaurantDetails.detail.menus.drinks.isEmpty) {
         _state = ResultState.NoData;
         notifyListeners();
         return _message = 'Empty Data';

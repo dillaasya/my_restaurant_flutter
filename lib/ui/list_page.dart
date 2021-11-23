@@ -14,7 +14,6 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-
   Widget _buildList(BuildContext context) {
     return ChangeNotifierProvider<ListProvider>(
         create: (_) => ListProvider(apiService: ApiService()),
@@ -24,21 +23,20 @@ class _ListPageState extends State<ListPage> {
               return const Center(child: CircularProgressIndicator());
             } else if (state.state == ResultState.hasData) {
               return SafeArea(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: state.result.restaurants.length,
-                            itemBuilder: (context, index) {
-                              var restaurant = state.result.restaurants[index];
-                              return CardRestaurant(restaurant: restaurant);
-                            },
-                          ),
-                        )
-                      ],
-                    )
-              );
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.result.restaurants.length,
+                      itemBuilder: (context, index) {
+                        var restaurant = state.result.restaurants[index];
+                        return CardRestaurant(restaurant: restaurant);
+                      },
+                    ),
+                  )
+                ],
+              ));
             } else if (state.state == ResultState.noData) {
               return Center(child: Text(state.message));
             } else if (state.state == ResultState.error) {
@@ -47,10 +45,8 @@ class _ListPageState extends State<ListPage> {
               return const Center(child: Text(''));
             }
           },
-        )
-    );
+        ));
   }
-
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(

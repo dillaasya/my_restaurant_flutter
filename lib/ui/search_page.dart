@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
@@ -21,73 +20,69 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-
   String query = '';
 
   Widget _buildList(BuildContext context) {
     return ChangeNotifierProvider<SearchProvider>(
       create: (_) => SearchProvider(apiService: ApiService(), query: query),
-      child: Consumer<SearchProvider>(
-          builder: (context, state, _) {
-            return Scaffold(
-                body: SafeArea(
+      child: Consumer<SearchProvider>(builder: (context, state, _) {
+        return Scaffold(
+            body: SafeArea(
+                child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 5, bottom: 30.0, right: 16, left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    height: 42,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black26),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextField(
+                      onSubmitted: (searchQuery) {
+                        setState(() {
+                          query = searchQuery;
+                          state.fetchRestaurantSearch(query);
+                          _buildSearch(context, state);
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.search),
+                        hintText: "Type restaurant name here...",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            query.isNotEmpty
+                ? _buildSearch(context, state)
+                : Container(
+                    alignment: Alignment.center,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 30.0, right: 16, left: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:  [
-                              const SizedBox(height: 8,),
-                              Container(
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                  border: Border.all(color: Colors.black26),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: TextField(
-                                  onSubmitted: (searchQuery){
-                                    setState(() {
-                                      query = searchQuery;
-                                      state.fetchRestaurantSearch(query);
-                                      _buildSearch(context, state);
-                                    });
-                                  },
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.search),
-                                    hintText: "Type restaurant name here...",
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        query.isNotEmpty?
-                        _buildSearch(context, state) :
-                        Container(
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 100,
-                                height: 100,
-                                  child: Image.asset("assets/empty.png")
-                              ),
-                              const Text('There\'s nothing to show')
-                            ],
-                          ),
-                        ),
-
+                      children: <Widget>[
+                        SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image.asset("assets/empty.png")),
+                        const Text('There\'s nothing to show')
                       ],
-                    )
-                )
-            );
-          }
-      ),
+                    ),
+                  ),
+          ],
+        )));
+      }),
     );
   }
 
@@ -104,8 +99,7 @@ class _SearchPageState extends State<SearchPage> {
           },
         ),
       );
-    }
-    else if (state.state == ResultState.NoData) {
+    } else if (state.state == ResultState.NoData) {
       return Center(child: Text(state.message));
     } else if (state.state == ResultState.Error) {
       return Center(child: Text(state.message));

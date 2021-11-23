@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:my_restaurant/data/api/api_service.dart';
 import 'package:my_restaurant/data/provider/list_provider.dart';
@@ -9,6 +10,8 @@ import 'data/db/database_helper.dart';
 import 'data/provider/database_provider.dart';
 
 void main() {
+
+
   runApp(const MyApp());
 }
 
@@ -19,12 +22,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ListProvider(apiService: ApiService())),
-        ChangeNotifierProvider(create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),),
+        ChangeNotifierProvider(
+            create: (_) => ListProvider(apiService: ApiService())),
+        ChangeNotifierProvider(
+          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+        ),
       ],
       child: Consumer<ListProvider>(
         builder: (context, provider, child) {
-
           return MaterialApp(
             title: 'News App',
             theme: ThemeData(
@@ -48,12 +53,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
             initialRoute: HomePage.routeName,
-            //initialRoute: ConnectivityPage.routeName,
             routes: {
-              //ConnectivityPage.routeName: (context) => ConnectivityPage(),
-              HomePage.routeName: (context) => HomePage(),
+              HomePage.routeName: (context) => const HomePage(),
               DetailPage.routeName: (context) => DetailPage(
-                id: ModalRoute.of(context)?.settings.arguments as String,),
+                    id: ModalRoute.of(context)?.settings.arguments as String,
+                  )
             },
           );
         },
