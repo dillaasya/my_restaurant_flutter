@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../utils/result_state.dart';
 
+
 class SearchPage extends StatefulWidget {
   static const routeName = '/restaurant_search';
 

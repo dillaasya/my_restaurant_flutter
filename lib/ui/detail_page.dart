@@ -6,6 +6,8 @@ import 'package:my_restaurant/data/provider/detail_provider.dart';
 import 'package:my_restaurant/widget/platform_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/result_state.dart';
+
 class DetailPage extends StatelessWidget{
   static const routeName = '/restaurant_list_detail';
   final String id;
@@ -17,9 +19,9 @@ class DetailPage extends StatelessWidget{
         create: (_) => DetailProvider(apiService: ApiService(), id: id),
         child: Consumer<DetailProvider>(
           builder: (context, state, _) {
-            if (state.state == ResultState.loading) {
+            if (state.state == ResultState.Loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.state == ResultState.hasData) {
+            } else if (state.state == ResultState.HasData) {
               final details = state.result.detail;
               return Scaffold(
                 body: SingleChildScrollView(
@@ -119,9 +121,9 @@ class DetailPage extends StatelessWidget{
                   ),
                 ),
               );
-            } else if (state.state == ResultState.noData) {
+            } else if (state.state == ResultState.NoData) {
               return Center(child: Text(state.message));
-            } else if (state.state == ResultState.error) {
+            } else if (state.state == ResultState.Error) {
               return Center(child: Text(state.message));
             } else {
               return const Center(child: Text(''));
