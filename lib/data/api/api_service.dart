@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart' show Client;
+import 'package:my_restaurant/data/model/restaurant.dart';
 import 'package:my_restaurant/data/model/restaurant_detail.dart';
-import 'package:my_restaurant/data/model/restaurant_list.dart';
-import 'package:my_restaurant/data/model/restaurant_search.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://restaurant-api.dicoding.dev/';
@@ -11,8 +10,14 @@ class ApiService {
   static const String _detail = 'detail/';
   static const String _search = 'search?q=';
 
+  Client? client;
+
+  ApiService({this.client}) {
+    client ??= Client();
+  }
+
   Future<RestaurantList> restaurantList() async {
-    final response = await http.get(Uri.parse(_baseUrl + _main));
+    final response = await client!.get(Uri.parse(_baseUrl + _main));
     if (response.statusCode == 200) {
       return RestaurantList.fromJson(json.decode(response.body));
     } else {
@@ -20,21 +25,21 @@ class ApiService {
     }
   }
 
-  Future<RestaurantDetail> detailList(String? id) async {
+  Future<RestaurantDetails> detailList(String? id) async {
     final response = await http.get(Uri.parse(_baseUrl + _detail + id!));
     if (response.statusCode == 200) {
-      return RestaurantDetail.fromJson(json.decode(response.body));
+      return RestaurantDetails.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to load restaurant details');
     }
   }
 
-  Future<RestaurantSearch> searchList(String query) async {
+  Future<RestaurantResult> searchList(String query) async {
     final response = await http.get(Uri.parse(_baseUrl + _search + query));
     if (response.statusCode == 200) {
-      return RestaurantSearch.fromJson(json.decode(response.body));
+      return RestaurantResult.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load restaurant details');
+      throw Exception('Failed to load restaurant search');
     }
   }
 }

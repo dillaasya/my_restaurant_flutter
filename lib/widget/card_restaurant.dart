@@ -1,59 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:my_restaurant/data/model/restaurant_list.dart';
-import 'package:my_restaurant/data/provider/database_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_restaurant/data/model/restaurant.dart';
 import 'package:my_restaurant/ui/detail_page.dart';
-import 'package:provider/provider.dart';
 
-class CardRestaurant extends StatelessWidget{
+class CardRestaurant extends StatelessWidget {
   final Restaurant restaurant;
 
   const CardRestaurant({Key? key, required this.restaurant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DatabaseProvider>(
-      builder: (context, provider, child) {
-        return FutureBuilder<bool>(
-          future: provider.isFavorited(restaurant.id),
-          builder: (context, snapshot) {
-            var isBookmarked = snapshot.data ?? false;
-            return Material(
-                child: ListTile(
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  leading: Hero(
-                    tag: restaurant.id,
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, DetailPage.routeName,
+              arguments: restaurant);
+        },
+        child: Card(
+          margin: const EdgeInsets.only(bottom: 20),
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(children: <Widget>[
+            SizedBox(
+                height: 90,
+                width: 110,
+                child: Hero(
+                  tag: restaurant.id,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(14), bottom: Radius.circular(14)),
                     child: Image.network(
-                      'https://restaurant-api.dicoding.dev/images/small/'
-                          + restaurant.pictureId,
-                      width: 100,
+                      'https://restaurant-api.dicoding.dev/images/small/' +
+                          restaurant.pictureId,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  title: Text(
+                )),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     restaurant.name,
+                    style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Text(restaurant.city),
-                  trailing: isBookmarked
-                      ? IconButton(
-                    icon: const Icon(Icons.favorite),
-                    onPressed: () => provider.removeFavorite(restaurant.id),
-                  )
-                      : IconButton(
-                    icon: const Icon(Icons.favorite_border),
-                    onPressed: () => provider.addFavortie(restaurant),
+                  const SizedBox(height: 7),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.black26,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        restaurant.city,
+                        style: GoogleFonts.roboto(fontWeight: FontWeight.w300),
+                      ),
+                    ],
                   ),
-                  onTap: () {
-                    Navigator.pushNamed(context, DetailPage.routeName,
-                        arguments: restaurant.id);
-                  },
+                  const SizedBox(height: 7),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Colors.black45,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        restaurant.rating,
+                        style: GoogleFonts.roboto(fontWeight: FontWeight.w300),
+                      ),
+                    ],
                   ),
-
-            );
-          },
-        );
-      },
-    );
-
+                ],
+              ),
+            )
+          ]),
+        ));
   }
-
 }

@@ -1,24 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:my_restaurant/data/api/api_service.dart';
-import 'package:my_restaurant/data/model/restaurant_list.dart';
+import 'dart:async';
 
-enum ResultState { loading, noData, hasData, error }
+import 'package:flutter/material.dart';
+import 'package:my_restaurant/data/model/restaurant.dart';
+import 'package:my_restaurant/utils/result_state.dart';
+import '../api/api_service.dart';
 
 class ListProvider extends ChangeNotifier {
   final ApiService apiService;
 
   ListProvider({required this.apiService}) {
-    _fetchRestaurantList();
+    fetchRestaurantList();
   }
 
   late RestaurantList _restaurantList;
   late ResultState _state;
   String _message = '';
+
   String get message => _message;
+
   RestaurantList get result => _restaurantList;
+
   ResultState get state => _state;
 
-  Future<dynamic> _fetchRestaurantList() async {
+  Future<dynamic> fetchRestaurantList() async {
     try {
       _state = ResultState.loading;
       notifyListeners();

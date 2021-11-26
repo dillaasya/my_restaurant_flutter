@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:my_restaurant/data/api/api_service.dart';
 import 'package:my_restaurant/data/model/restaurant_detail.dart';
 import 'package:my_restaurant/utils/result_state.dart';
+import '../api/api_service.dart';
 
 class DetailProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -12,30 +14,32 @@ class DetailProvider extends ChangeNotifier {
     _fetchRestaurantDetails(id);
   }
 
-  late RestaurantDetail _restaurantDetails;
+  late RestaurantDetails _restaurantDetails;
   late ResultState _state;
   String _message = '';
   String get message => _message;
-  RestaurantDetail get result => _restaurantDetails;
+
+  RestaurantDetails get result => _restaurantDetails;
+
   ResultState get state => _state;
 
   Future<dynamic> _fetchRestaurantDetails(String? id) async {
     try {
-      _state = ResultState.Loading;
+      _state = ResultState.loading;
       notifyListeners();
       final restaurantDetails = await apiService.detailList(id);
-      if (restaurantDetails.detail.menus.foods.isEmpty &&
-          restaurantDetails.detail.menus.drinks.isEmpty) {
-        _state = ResultState.NoData;
+      if (restaurantDetails.restaurantDetailsData.menus.foods.isEmpty &&
+          restaurantDetails.restaurantDetailsData.menus.drinks.isEmpty) {
+        _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
-        _state = ResultState.HasData;
+        _state = ResultState.hasData;
         notifyListeners();
         return _restaurantDetails = restaurantDetails;
       }
     } catch (e) {
-      _state = ResultState.Error;
+      _state = ResultState.error;
       notifyListeners();
       return _message = 'Turn on your internet connection';
     }

@@ -1,11 +1,10 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_restaurant/ui/detail_page.dart';
 import 'package:my_restaurant/ui/favorite_page.dart';
 import 'package:my_restaurant/ui/list_page.dart';
-import 'package:my_restaurant/ui/search_page.dart';
-import 'package:my_restaurant/ui/setting_page.dart';
-import 'package:my_restaurant/widget/platform_widget.dart';
+import 'package:my_restaurant/ui/settings_page.dart';
+import 'package:my_restaurant/utils/notification_helper.dart';
+import 'search_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -18,34 +17,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
-  static const String _dashboardTitle = 'Dashboard';
+  static const String _restaurantText = 'Restaurants';
+  static const String _searchText = 'Search';
+  static const String _settingsText = 'Settings';
+  static const String _favoriteText = 'Favorites';
+
+  final NotificationHelper _notificationHelper = NotificationHelper();
 
   final List<Widget> _listWidget = [
     const ListPage(),
     const SearchPage(),
     const FavoritePage(),
-    const SettingPage()
+    const SettingsPage(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
-      label: _dashboardTitle,
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.dashboard),
+      label: _restaurantText,
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.search : Icons.search),
-      label: SearchPage.searchTitle,
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS
-          ? CupertinoIcons.square_favorites_alt
-          : Icons.favorite),
-      label: FavoritePage.favoriteTitle,
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
-      label: SettingPage.settingTitle,
-    ),
+    const BottomNavigationBarItem(icon: Icon(Icons.search), label: _searchText),
+    const BottomNavigationBarItem(
+        icon: Icon(Icons.favorite), label: _favoriteText),
+    const BottomNavigationBarItem(
+        icon: Icon(Icons.settings), label: _settingsText),
   ];
 
   void _onBottomNavTapped(int index) {
@@ -61,24 +56,27 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _bottomNavIndex,
         items: _bottomNavBarItems,
         onTap: _onBottomNavTapped,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }
 
-  Widget _buildIos(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(items: _bottomNavBarItems),
-      tabBuilder: (context, index) {
-        return _listWidget[index];
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(DetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return _buildAndroid(context);
   }
 }

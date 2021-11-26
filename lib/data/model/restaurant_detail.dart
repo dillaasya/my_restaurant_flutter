@@ -1,43 +1,38 @@
 // To parse this JSON data, do
 //
-//     final restaurantDetail = restaurantDetailFromJson(jsonString);
+//     final restaurantDetails = restaurantDetailsFromJson(jsonString);
 
-class RestaurantDetail {
-  RestaurantDetail({
+class RestaurantDetails {
+  RestaurantDetails({
     required this.error,
     required this.message,
-    required this.detail,
+    required this.restaurantDetailsData,
   });
 
   bool error;
   String message;
-  Detail detail;
+  RestaurantDetailsData restaurantDetailsData;
 
-  factory RestaurantDetail.fromJson(Map<String, dynamic> json) =>
-      RestaurantDetail(
+  factory RestaurantDetails.fromJson(Map<String, dynamic> json) =>
+      RestaurantDetails(
         error: json["error"],
         message: json["message"],
-        detail: Detail.fromJson(json["restaurant"]),
+        restaurantDetailsData:
+            RestaurantDetailsData.fromJson(json["restaurant"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "detail": detail.toJson(),
-      };
 }
 
-class Detail {
-  Detail({
+class RestaurantDetailsData {
+  RestaurantDetailsData({
     required this.id,
     required this.name,
     required this.description,
     required this.city,
     required this.address,
     required this.pictureId,
-    required this.rating,
     required this.categories,
     required this.menus,
+    required this.rating,
     required this.customerReviews,
   });
 
@@ -47,22 +42,23 @@ class Detail {
   String city;
   String address;
   String pictureId;
-  double rating;
   List<Category> categories;
   Menus menus;
+  String rating;
   List<CustomerReview> customerReviews;
 
-  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+  factory RestaurantDetailsData.fromJson(Map<String, dynamic> json) =>
+      RestaurantDetailsData(
         id: json["id"],
         name: json["name"],
         description: json["description"],
         city: json["city"],
         address: json["address"],
         pictureId: json["pictureId"],
-        rating: json["rating"].toDouble(),
         categories: List<Category>.from(
             json["categories"].map((x) => Category.fromJson(x))),
         menus: Menus.fromJson(json["menus"]),
+        rating: json["rating"].toString(),
         customerReviews: List<CustomerReview>.from(
             json["customerReviews"].map((x) => CustomerReview.fromJson(x))),
       );
@@ -128,18 +124,34 @@ class Menus {
     required this.drinks,
   });
 
-  List<Category> foods;
-  List<Category> drinks;
+  List<FoodsDrinks> foods;
+  List<FoodsDrinks> drinks;
 
   factory Menus.fromJson(Map<String, dynamic> json) => Menus(
-        foods:
-            List<Category>.from(json["foods"].map((x) => Category.fromJson(x))),
-        drinks: List<Category>.from(
-            json["drinks"].map((x) => Category.fromJson(x))),
+        foods: List<FoodsDrinks>.from(
+            json["foods"].map((x) => FoodsDrinks.fromJson(x))),
+        drinks: List<FoodsDrinks>.from(
+            json["drinks"].map((x) => FoodsDrinks.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "foods": List<dynamic>.from(foods.map((x) => x.toJson())),
         "drinks": List<dynamic>.from(drinks.map((x) => x.toJson())),
+      };
+}
+
+class FoodsDrinks {
+  FoodsDrinks({
+    required this.name,
+  });
+
+  String name;
+
+  factory FoodsDrinks.fromJson(Map<String, dynamic> json) => FoodsDrinks(
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
       };
 }
